@@ -1,0 +1,10 @@
+prerequisite:
+1) Arduino Uno
+2) Bread board
+3) Jumper Wires
+4) Ysf-201 water flow sensor
+
+Instructions:
+Connect the sensory to the various outlets in the household.
+Define ports.
+Run application server.
