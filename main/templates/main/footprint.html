@@ -1,0 +1,174 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<center>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+</script>
+<head>
+<script src = "https://code.highcharts.com/highcharts.js"></script>
+
+
+    <script src="{% static "js/pixi.js" %}"></script>
+    <body>
+        <div id="display" class="main"></div>
+        
+    </body>
+    <script >
+/////////////////////
+PIXI.utils.sayHello();
+var app = new PIXI.Application(700 , 700, {transparent : true});
+document.getElementById("display").appendChild(app.view);
+//var container = new PIXI.Contain er();
+
+var water = PIXI.Sprite.fromImage("{% static "pics/water1.png" %}");
+var dial = PIXI.Sprite.fromImage("{% static "pics/dial1.png" %}");
+var meter = PIXI.Sprite.fromImage("{% static "pics/meter1.png" %}");
+
+water.y = app.screen.height  / 2;
+water.x = (app.screen.width /2) - 155;
+
+dial.y = app.screen.height  / 2 + 70;
+dial.x = app.screen.width /2 - 40;
+
+meter.y = app.screen.height  / 2 -320;
+meter.x = app.screen.width /2  - 300;
+
+dial.pivot.x += 20;
+dial.pivot.y = (app.screen.height /2) -150;
+//container.addChild(dial);
+//container.pivot.x = container.width/2;  
+//container.pivot.y = container.height/2;
+
+//water.blendMode = new PIXI.BLEND_MODES.COLOR;
+app.stage.addChild(water);
+app.stage.addChild(dial);
+app.stage.addChild(meter);
+dial.rotation =  -121;
+var right = true;
+///////////////////////
+        setTimeout(()=>{
+            console.log("asdfd");
+var maxElement = {{volume}};
+
+    var temp;
+    maxElement = maxElement[maxElement.length - 1];
+    //maxElement = 1000; // comment this line .. to remove dial dummy value
+    document.getElementById("amount").value = `${maxElement} mL`;
+    console.log(maxElement); // (161/300) *10
+    maxElement = (maxElement / 370)
+app.ticker.add(function(delta){
+        /*if( right){
+            dial.rotation += 0.07 * delta;
+            if(dial.rotation>-118){
+                right = false;
+                console.log("false");
+            }
+        }
+        else {
+            dial.rotation -= 0.07 * delta;
+            if(dial.rotation < -121){
+                right = true;
+                console.log("true");
+            }
+        }
+        */
+        if(dial.rotation + 118 +3 < maxElement){
+            dial.rotation += 0.05 * delta;
+        }
+        console.log(dial.rotation);
+})
+
+// -30
+
+        },2000);
+    </script>
+
+
+
+<table style="width:100%;background-color:#7CFC00;height:30%;">
+    <tr style="background-color:#000;">
+        <th style="border: 2px solid white;color:#fff;text-align:center;">Eco-Friendly</th>
+        <th  style="border: 2px solid white;color:#fff;text-align:center;">Ideal</th>
+        <th  style="border: 2px solid white;color:#fff;text-align:center;">High</th>
+        <th  style="border: 2px solid white;color:#fff;text-align:center;">Extreame</th>
+    </tr>
+    <tr>
+        <td style="border: 2px solid black;color:#000;text-align:center;background-color:rgb(140, 235, 248)">0-250(mL)</td>
+        <th  style="border: 2px solid black;color:#000;text-align:center;background-color:rgb(157, 252, 177)">250-500(mL)</td>
+        <td  style="border: 2px solid black;color:#000;text-align:center;background-color:rgb(138, 207, 144)">500-750(mL)</td>
+        <td  style="border: 2px solid black;color:#000;text-align:center;background-color:#F08080">750-1000(mL)</td>
+    </tr></table>
+    <p><br><br></p>
+    <input type = "text" id = "amount">
+    <p><br><br></p>
+    <div id="container"></div>
+    
+
+
+    <style>
+      .base-message{
+          font-family: 'Trebuchet MS';
+          font-weight: bold;
+          text-align: center;
+          font-size: 25px;
+          
+      }
+    </style>
+  
+    <script>
+          Highcharts.chart('container', {
+            title: {
+                text: 'Hardware data on a chart'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+        
+            xAxis: {
+              categories: [''],
+              title: {
+                  text: null
+              },
+              labels: {
+               enabled:false,//default is true
+               y : 20, rotation: -45, align: 'right' }
+              },
+  
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 3000
+                }
+            },
+        
+            series: [{
+                name: 'Project Development',
+                data: {{volume}} //[null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+            }],
+        
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                        
+                    },
+                    chartOptions: {
+                        legend: {
+                            
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        
+        });
+        </script>
+  
+{% endblock %}
